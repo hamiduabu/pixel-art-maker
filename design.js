@@ -1,72 +1,152 @@
 $(function () {
-    const gridArea = $('#pixel-canvas');
-    const sizePicker = $('#size-picker');
-    const bgColorPicker = $('#bg-color-picker');
+  /**
+  * Block scoped variables used more than once
+ */
 
-    // Select size input
+  const gridArea = $('#pixel-canvas')
+  const sizePicker = $('#size-picker')
+  const height = $('#input-height')
+  const width = $('#input-width')
+  const bgColorPicker = $('#bg-color-picker')
+  const fsBgColorPicker = $('#fs-bgcolor')
+  const gridColor = $('#color-picker')
+  const fsGridColor = $('#fs-gridcolor')
 
-    function makeGrid() {
-        const gridHeight = $('#input-height').val();
-        const gridWidth = $('#input-width').val();
+  /**
+ * @description takes input/values from #input-height and #input-width to create grid
+ */
 
-        for (let n = 0; n < gridHeight; n++) {
-            gridArea.append('<tr></tr>');
-        }
-        for (let m = 0; m < gridWidth; m++) {
-            $('#pixel-canvas>tr').append('<td></td>');
-        }
+  function makeGrid () {
+    const gridHeight = height.val()
+    const gridWidth = width.val()
+
+    for (let n = 0; n < gridHeight; n++) {
+      gridArea.append('<tr></tr>')
     }
+    for (let m = 0; m < gridWidth; m++) {
+      $('#pixel-canvas>tr').append('<td></td>')
+    }
+  }
 
-    // When size is submitted by the user, call makeGrid()
+  /**
+* @description Changes background color
+* @param {html attribute} elementId - html element ID
+*/
 
-    sizePicker.submit(function (event) {
-        gridArea.children().remove();
-        makeGrid();
-        event.preventDefault();
-    });
+  function changeBgColor (elementId) {
+    const bgColor = elementId.val()
+    $('body').css('background', bgColor)
+    gridArea.css('background', '#fff')
+  }
 
-    // Change mouse pointer to 'cell' type when over created grid
+  /**
+* @description Changes grid color
+* @param {html attribute} elementId - html element ID
+* @returns {css property} Color
+*/
 
-    gridArea.mouseover(function () {
-        $(this).css('cursor', 'cell');
-    });
+  function changeGridColor (elementId) {
+    const color = elementId.val()
+    return color
+  }
 
-    //Select background color input
+  /**
+* @description When size is submitted by the user, clear previous Grid and call makeGrid()
+* @param {event} submit - On submit of height and width values
+* @param {handler} function - Call changeBgColor(elementId). Prevent default behaviour of submit event
+*/
 
-    bgColorPicker.on('change', function () {
-        const bgColor = bgColorPicker.val();
-        $('body').css('background', bgColor);
-        gridArea.css('background', 'white');
-    });
+  sizePicker.submit(function (event) {
+    gridArea.children().remove()
+    makeGrid()
+    event.preventDefault()
+  })
 
-    // Select color input
+  /**
+* @description Change mouse pointer to 'cell' type when over created grid
+* @param {event} mouseover - On mouse over created grid
+* @param {handler} function - Target grid area
+*/
 
-    gridArea.on('click', 'td', function () {
-        const color = $('#color-picker').val();
-        $(this).attr('style') ? $(this).removeAttr('style') : $(this).css('background', color);
-    });
+  gridArea.mouseover(function () {
+    $(this).css('cursor', 'cell')
+  })
 
-    // Clear color input
+  /**
+* @description Select/change background color value of application
+* @param {event} change - On Change of color value
+* @param {handler} function - Call changeBgColor(elementId)
+*/
 
-    $('#clear').on('click', function () {
-        $('td').removeAttr('style');
-    });
+  bgColorPicker.on('change', function () {
+    changeBgColor(bgColorPicker)
+  })
 
-    // Delete Grid and reset input
+  /**
+* @description Select/change background color value of application when fullscreen(fs) is selected
+* @param {event} change - On Change of color value
+* @param {handler} function - Call changeBgColor(elementId)
+*/
 
-    $('#reset').on('click', function () {
-        gridArea.children().remove();
-        const height = $('#input-height');
-        const width = $('#input-width');
-        height.val('1');
-        width.val('1');
-    });
+  fsBgColorPicker.on('change', function () {
+    changeBgColor(fsBgColorPicker)
+  })
 
-    // Toggle 'full screen' to display grid in a larger view
+  /**
+* @description Select grid color value to apply or remove from grid
+* @param {event} click - On click of grid cells
+* @param {selector} td - Grid cell
+* @param {handler} function - Check for conditions and Call changeGridColor(elementId) either in normal or fullscreen(fs) view
+*/
 
-    $('#hide').on('click', function () {
-        $('#top').toggle('100ms', 'linear', function () {
-            $('#hide').html() === 'full screen' ? $('#hide').html('normal screen'): $('#hide').html('full screen');
-        });
-    });
-});
+  gridArea.on('click', 'td', function () {
+    fullScreen.html() === 'full screen'
+      ? $(this).attr('style')
+          ? $(this).removeAttr('style')
+          : $(this).css('background', changeGridColor(gridColor))
+      : $(this).attr('style')
+          ? $(this).removeAttr('style')
+          : $(this).css('background', changeGridColor(fsGridColor))
+  })
+
+  /**
+* @description Clear all color values from the grid
+* @param {event} click - On click of "clear grid" button
+* @param {handler} function - Target grid cells to remove color values
+*/
+
+  const clearGrid = $('#clear')
+  clearGrid.on('click', function () {
+    $('#pixel-canvas td').removeAttr('style')
+  })
+
+  /**
+* @description Delete Grid and reset input values to 1
+* @param {event} click - On click of "delete grid" button
+* @param {handler} function - Target table id to remove grid
+*/
+
+  const deleteGrid = $('#reset')
+  deleteGrid.on('click', function () {
+    gridArea.children().remove()
+    height.val('1')
+    width.val('1')
+  })
+
+  /**
+* @description Toggle 'full screen' to display grid area in a larger view
+* @param {event} click - On click of the "fullscreen"(fs) button
+* @param {handler} function - Hides/shows a portion of the page view
+*/
+
+  const fullScreen = $('#hide')
+  const btnFullscreen = $('.btn-fs')
+  fullScreen.on('click', function () {
+    $('#top').toggle('100ms', 'linear', function () {
+      fullScreen.html() === 'full screen'
+        ? fullScreen.html('normal screen') &&
+            btnFullscreen.css('display', 'unset')
+        : fullScreen.html('full screen') && btnFullscreen.css('display', 'none')
+    })
+  })
+})
