@@ -3,14 +3,14 @@ $(function() {
    * Block scoped variables used more than once
    */
 
-  const gridArea = $("#pixel-canvas");
-  const sizePicker = $("#size-picker");
-  const height = $("#input-height");
-  const width = $("#input-width");
-  const bgColorPicker = $("#bg-color-picker");
-  const fsBgColorPicker = $("#fs-bgcolor");
-  const gridColor = $("#color-picker");
-  const fsGridColor = $("#fs-gridcolor");
+  const gridArea = $('#pixel-canvas');
+  const sizePicker = $('#size-picker');
+  const height = $('#input-height');
+  const width = $('#input-width');
+  const bgColorPicker = $('#bg-color-picker');
+  const fsBgColorPicker = $('#fs-bgcolor');
+  const gridColor = $('#color-picker');
+  const fsGridColor = $('#fs-gridcolor');
 
   /**
    * @description takes input/values from #input-height and #input-width to create grid
@@ -21,10 +21,10 @@ $(function() {
     const gridWidth = width.val();
 
     for (let n = 0; n < gridHeight; n++) {
-      gridArea.append("<tr></tr>");
+      gridArea.append('<tr></tr>');
     }
     for (let m = 0; m < gridWidth; m++) {
-      $("#pixel-canvas>tr").append("<td></td>");
+      $('#pixel-canvas>tr').append('<td></td>');
     }
   }
 
@@ -35,8 +35,8 @@ $(function() {
 
   function changeBgColor(elementId) {
     const bgColor = elementId.val();
-    $("body").css("background", bgColor);
-    gridArea.css("background", "#fff");
+    $('body').css('background', bgColor);
+    gridArea.css('background', '#fff');
   }
 
   /**
@@ -69,7 +69,7 @@ $(function() {
    */
 
   gridArea.mouseover(function() {
-    $(this).css("cursor", "cell");
+    $(this).css('cursor', 'cell');
   });
 
   /**
@@ -78,7 +78,7 @@ $(function() {
    * @param {handler} function - Call changeBgColor(elementId)
    */
 
-  bgColorPicker.on("change", function() {
+  bgColorPicker.on('change', function() {
     changeBgColor(bgColorPicker);
   });
 
@@ -88,7 +88,7 @@ $(function() {
    * @param {handler} function - Call changeBgColor(elementId)
    */
 
-  fsBgColorPicker.on("change", function() {
+  fsBgColorPicker.on('change', function() {
     changeBgColor(fsBgColorPicker);
   });
 
@@ -99,55 +99,55 @@ $(function() {
    * @param {handler} function - Check for conditions and Call changeGridColor(elementId) either in normal or fullscreen(fs) view
    */
 
-  gridArea.on("click", "td", function() {
-    fullScreen.html() === "full screen"
-      ? $(this).attr("style")
-        ? $(this).removeAttr("style")
-        : $(this).css("background", changeGridColor(gridColor))
-      : $(this).attr("style")
-        ? $(this).removeAttr("style")
-        : $(this).css("background", changeGridColor(fsGridColor));
+  gridArea.on('click', 'td', function() {
+    fullScreen.html() === 'full screen'
+      ? $(this).attr('style')
+        ? $(this).removeAttr('style')
+        : $(this).css('background', changeGridColor(gridColor))
+      : $(this).attr('style')
+        ? $(this).removeAttr('style')
+        : $(this).css('background', changeGridColor(fsGridColor));
   });
 
   /**
    * @description Clear all color values from the grid
-   * @param {event} click - On click of "clear grid" button
+   * @param {event} click - On click of 'clear grid' button
    * @param {handler} function - Target grid cells to remove color values
    */
 
-  const clearGrid = $("#clear");
-  clearGrid.on("click", function() {
-    $("#pixel-canvas td").removeAttr("style");
+  const clearGrid = $('#clear');
+  clearGrid.on('click', function() {
+    $('#pixel-canvas td').removeAttr('style');
   });
 
   /**
    * @description Delete Grid and reset input values to 1
-   * @param {event} click - On click of "delete grid" button
+   * @param {event} click - On click of 'delete grid' button
    * @param {handler} function - Target table id to remove grid
    */
 
-  const deleteGrid = $("#reset");
-  deleteGrid.on("click", function() {
+  const deleteGrid = $('#reset');
+  deleteGrid.on('click', function() {
     gridArea.children().remove();
-    height.val("1");
-    width.val("1");
+    height.val('1');
+    width.val('1');
   });
 
   /**
    * @description Toggle 'full screen' to display grid area in a larger view
-   * @param {event} click - On click of the "fullscreen"(fs) button
+   * @param {event} click - On click of the 'fullscreen'(fs) button
    * @param {handler} function - Hides/shows a portion of the page view
    */
 
-  const fullScreen = $("#hide");
-  const btnFullscreen = $(".btn-fs");
-  fullScreen.on("click", function() {
-    $("#top").toggle("100ms", "linear", function() {
-      fullScreen.html() === "full screen"
-        ? fullScreen.html("normal screen") &&
-          btnFullscreen.css("display", "unset")
-        : fullScreen.html("full screen") &&
-          btnFullscreen.css("display", "none");
+  const fullScreen = $('#hide');
+  const btnFullscreen = $('.btn-fs');
+  fullScreen.on('click', function() {
+    $('#top').toggle('100ms', 'linear', function() {
+      fullScreen.html() === 'full screen'
+        ? fullScreen.html('normal screen') &&
+          btnFullscreen.css('display', 'unset')
+        : fullScreen.html('full screen') &&
+          btnFullscreen.css('display', 'none');
     });
   });
 });
